@@ -103,7 +103,7 @@ if (!document.head.querySelector("meta[name=viewport]")) {
   elements.prepend(createMetaViewport());
 }
 
-function styleMover(linkURL) {
+function styleMover(exportDoc, linkURL) {
   return exportDoc => {
     const w3cStyle = exportDoc.querySelector(`head link[href="${linkURL}"]`);
     exportDoc.querySelector("head").append(w3cStyle);
@@ -133,7 +133,7 @@ export function run(conf) {
 
   const finalStyleURL = getStyleUrl();
   linkCSS(document, finalStyleURL);
-  const moveStyle = styleMover(finalStyleURL);
+  const moveStyle = styleMover(document, finalStyleURL);
   sub("beforesave", moveStyle);
 
   // code hierboven mogenlijk overbodig?
@@ -157,7 +157,7 @@ export function run(conf) {
       />`
     );
     // As required by W3C Pub Rules.
-    sub("beforesave", styleMover(darkModeStyleUrl));
+    sub("beforesave", styleMover(document, darkModeStyleUrl));
   }
 }
 
